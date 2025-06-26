@@ -1,0 +1,40 @@
+###############################################################################
+# Gemma-3-1B (CPU-only, Windows) – requirements.txt
+# ---------------------------------------------------------------------------
+# • Option A  ⇢  Plain PyTorch CPU (≈4 GB RAM, ~3-5 tok/s)
+# • Option B  ⇢  GGUF + llama.cpp (≈0.9 GB RAM, ~6-8 tok/s)         ← add two lines
+#
+# Everything else (LangChain, FastAPI, etc.) is backend-agnostic.
+###############################################################################
+
+# 1️⃣  Core: CPU-only PyTorch – use the official CPU wheel index
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch>=2.2                 # autodetects +cpu via the index URL
+accelerate>=0.28
+# torchvision / torchaudio not required for text-only models
+
+# 2️⃣  Transformers ecosystem
+transformers>=4.50
+sentencepiece>=0.1.99          # pulled automatically on first run, but pinning is safer
+
+# 3️⃣  LangChain (v0.2 series)
+langchain>=0.2
+langchain-community>=0.2
+langchain-huggingface>=0.2
+
+# 4️⃣  REST service
+fastapi>=0.111
+uvicorn[standard]>=0.30
+
+# 5️⃣  OPTIONAL – enable Option B (quantised GGUF on llama.cpp)
+#     Comment these two lines out if you stick to Option A.
+llama-cpp-python>=0.2.32+cpu
+safetensors>=0.4.3             # needed by some GGUF builds
+
+###############################################################################
+# Usage:
+#   pip install -r requirements.txt
+#
+# If you hit “no matching distribution” for torch, make sure you’re
+# using Python 3.9 – 3.12 (PyTorch CPU wheels are published for these).
+###############################################################################
